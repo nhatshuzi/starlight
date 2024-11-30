@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Câu hỏi có hay không</title>
+    <style>
+        .question-container {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+            position: relative;
+        }
+        .button {
+            padding: 10px 20px;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            position: relative;
+        }
+        .button-red {
+            background-color: red;
+        }
+        .button-green {
+            background-color: green;
+        }
+        .congratulations {
+            display: none;
+            text-align: center;
+            font-size: 24px;
+            color: green;
+            margin-top: 20px;
+        }
+        #countdown {
+            font-size: 20px;
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="#" id="questionLink">Click vào đây để xem câu hỏi</a>
+
+    <div class="question-container" id="questionContainer">
+        <p id="question">Câu hỏi: Bạn có ăn cứt hay không?</p>
+        <button class="button button-red" id="btnWrong" onclick="wrongAnswer()">Không</button>
+        <button class="button button-green" id="btnCorrect" onclick="correctAnswer()">Có</button>
+    </div>
+
+    <div class="congratulations" id="congratulationsContainer">
+        <p>Chúc mừng bạn, giờ bạn là trùm ăn cức!</p>
+        <p id="countdown">3</p>
+    </div>
+
+    <script>
+        let questionStep = 1; // Để theo dõi bước câu hỏi
+
+        document.getElementById('questionLink').onclick = function(event) {
+            event.preventDefault();
+            document.getElementById('questionContainer').style.display = 'block';
+        }
+
+        function wrongAnswer() {
+            // Di chuyển nút "Không" đến vị trí ngẫu nhiên
+            const btnWrong = document.getElementById('btnWrong');
+            const width = window.innerWidth - btnWrong.offsetWidth;
+            const height = window.innerHeight - btnWrong.offsetHeight;
+
+            const randomX = Math.random() * width;
+            const randomY = Math.random() * height;
+
+            btnWrong.style.position = 'absolute';
+            btnWrong.style.left = randomX + 'px';
+            btnWrong.style.top = randomY + 'px';
+        }
+
+        function correctAnswer() {
+            if (questionStep === 1) {
+                // Nếu là câu hỏi đầu tiên, chuyển sang câu hỏi thứ hai
+                document.getElementById('question').textContent = "Ngoài ăn cứt, bạn còn ăn gì nữa không?";
+                questionStep = 2; // Chuyển sang bước 2
+            } else if (questionStep === 2) {
+                // Hiển thị bảng chúc mừng sau khi trả lời câu hỏi thứ 2
+                document.getElementById('questionContainer').style.display = 'none';
+                document.getElementById('congratulationsContainer').style.display = 'block';
+
+                // Bắt đầu đếm ngược
+                let countdown = 3;
+                const countdownElement = document.getElementById('countdown');
+
+                const interval = setInterval(function() {
+                    countdownElement.textContent = countdown;
+                    countdown--;
+
+                    if (countdown < 0) {
+                        clearInterval(interval);
+                        window.close(); // Đóng trang sau 3 giây
+                    }
+                }, 1000);
+            }
+        }
+    </script>
+
+</body>
+</html>
